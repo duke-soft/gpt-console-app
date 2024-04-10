@@ -3,7 +3,7 @@ A simple Chat GPT console interface made with C#.
 ## Commands:
 Run the program to start the chat.
 Run it with arguments to enter a prompt: Ex. `./SimpleGPTInterface.exe What is the weather today?`.
-Use `-i [prompt]` to generate an image immediately (or see the command below once the program has started).
+Use `-image [prompt]` to generate an image immediately (or see the command below once the program has started).
 - `[any text]`: Ask ChatGPT.
 - `:image` - Ask for a prompt and generate an image.
 - `:chatmodel` - Set the current GPT model ex. gpt-4-32k.
