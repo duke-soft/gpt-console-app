@@ -22,6 +22,7 @@ using Newtonsoft.Json;
  * :syswrite    - write current system messages to given file
  * :sysread     - load system messages from given file
  * :image       - generate an image from a given prompt
+ * :code        - add source code file as message
  * :chatmodel   - set chat model
  * :imagemodel  - set image model
  * [any string] - respond to user input
@@ -62,6 +63,7 @@ namespace SimpleGPTInterface {
                         args[0] = "";
 
                         if (args.Length > 1) {
+                            // Add the given code file as a message
                             AddCodeAsMessage(args[1], messages);
                         } else {
                             Console.WriteLine("No code file provided.");
@@ -101,16 +103,20 @@ namespace SimpleGPTInterface {
 
                         break;
                     case ":sysview":
+                        // View system messages
                         ListMessages(messages, "system");
                         break;
                     case ":sysrm":
+                        // Get list of system message indices in the message list
                         indices = ListMessages(messages, "system");
 
                         if (indices.Length > 0) {
+                            // Ask user for a message index to remove
                             Console.Write("Enter # of message to remove: ");
                             int choice = int.Parse(Console.ReadLine());
 
                             if(choice > 0 && choice <= indices.Length) {
+                                // Remove the desired system message
                                 messages.RemoveAt(indices[choice - 1]);
                                 Console.WriteLine("System message removed.");
                             } else {
@@ -176,6 +182,7 @@ namespace SimpleGPTInterface {
 
                         break;
                     case ":code":
+                        // Ask for a code file to add as a message
                         Console.Write("Enter code file name or path: ");
                         prompt = Console.ReadLine();
                         AddCodeAsMessage(prompt, messages);
@@ -309,12 +316,18 @@ namespace SimpleGPTInterface {
             return indices.ToArray();
         }
 
+        /*
+         * Given a file path (relative, ex. program.py, or absolute, ex. C:/.../program.py),
+         * read the file and add it as a message to the given list of messages.
+         */
         static void AddCodeAsMessage(string file, List<Message> messages) {
             string filepath;
 
             if (file.StartsWith("C:")) {
+                // Absolute path
                 filepath = file;
             } else {
+                // Relative path
                 filepath = Directory.GetCurrentDirectory() + "/" + file;
             }
 
