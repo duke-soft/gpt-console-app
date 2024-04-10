@@ -49,21 +49,34 @@ namespace SimpleGPTInterface {
             bool running = true;
 
             if (args.Length > 0) {
-                if (args[0] == "-image") {
-                    args[0] = "";
-                    Console.WriteLine("Generating...");
-                    // Send prompt and model to image generation API and await response
-                    string url = await GetImageGenerationAsync(String.Join(" ", args), "dall-e-3");
-                    // Open URL to generated image in default browser
-                    System.Diagnostics.Process.Start(url);
-                } else {
-                    // Add a user message and respond to it
-                    messages.Add(new Message("user", String.Join(" ", args)));
-                    // Send messages to chat completion API and await response
-                    string response = await GetChatCompletionAsync(messages.ToArray(), chat_model);
-                    Console.WriteLine(response);
-                    // Add AI response to messages
-                    messages.Add(new Message("assistant", response));
+                switch (args[0]) {
+                    case "-image":
+                        args[0] = "";
+                        Console.WriteLine("Generating...");
+                        // Send prompt and model to image generation API and await response
+                        string url = await GetImageGenerationAsync(String.Join(" ", args), "dall-e-3");
+                        // Open URL to generated image in default browser
+                        System.Diagnostics.Process.Start(url);
+                        break;
+                    case "-code":
+                        args[0] = "";
+
+                        if (args.Length > 1) {
+                            AddCodeAsMessage(args[1], messages);
+                        } else {
+                            Console.WriteLine("No code file provided.");
+                        }
+
+                        break;
+                    default:
+                        // Add a user message and respond to it
+                        messages.Add(new Message("user", String.Join(" ", args)));
+                        // Send messages to chat completion API and await response
+                        string response = await GetChatCompletionAsync(messages.ToArray(), chat_model);
+                        Console.WriteLine(response);
+                        // Add AI response to messages
+                        messages.Add(new Message("assistant", response));
+                        break;
                 }
             }
 
@@ -161,6 +174,11 @@ namespace SimpleGPTInterface {
                             System.Diagnostics.Process.Start(url);
                         }
 
+                        break;
+                    case ":code":
+                        Console.Write("Enter code file name or path: ");
+                        prompt = Console.ReadLine();
+                        AddCodeAsMessage(prompt, messages);
                         break;
                     case ":chatmodel":
                         Console.Write("Enter chat model: ");
@@ -289,6 +307,20 @@ namespace SimpleGPTInterface {
             }
 
             return indices.ToArray();
+        }
+
+        static void AddCodeAsMessage(string file, List<Message> messages) {
+            string filepath;
+
+            if (file.StartsWith("C:")) {
+                filepath = file;
+            } else {
+                filepath = Directory.GetCurrentDirectory() + "/" + file;
+            }
+
+            string code = File.ReadAllText(filepath);
+            messages.Add(new Message("user", "Here\'s my code: " + code));
+            Console.WriteLine("Code added as message.");
         }
 
         /* 
