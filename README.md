@@ -25,7 +25,7 @@ Use `-code [file]` to add a source code file as a message so you can discuss it 
   You will also need to add your valid OpenAI API key as a system environment variable named `OPENAI_API_KEY`.
   
   Use `dotnet build` to compile the project. The executable will be under `bin\Debug\SimpleGPTInterface.exe`.
-  
-  Feel free to rename the file and add it to your system path so you can easily call it from the command line, kinda like this:
+
+  You can rename the executable to something simple like `gpt.exe` and move it, along with `Newtonsoft.Json.dll`, to a more memorable location. You can then add that location to your `PATH` / `Path` system environment variable to call it from the command line, kinda like this:
   
   `gpt whats 4 times 12?`. No "quotes" needed.
