@@ -32,7 +32,7 @@ using Newtonsoft.Json;
  */
 namespace SimpleGPTInterface {
     class Program {
-        static string apiKey = System.Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        static readonly string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set or is empty.");
 
         static async Task Main(string[] args) {
             // List to store chat message objects for current conversation
