@@ -20,5 +20,12 @@ Use `-code [file]` to add a source code file as a message so you can discuss it 
 - `:exit` - Exit the program.
   
   ---
-  Feel free to rename the file and add it to your system path or alias it so you can easily call it from the command line, kinda like this:
+  This project requires the Newtonsoft.Json package. Assuming you have the C# Extension, .NET SDK, Build Tools, and Nuget set up, you can create the 'packages' folder and run `nuget restore SimpleGPTInterface.csproj -PackagesDirectory ./packages` to install the package.
+
+  You will also need to add your valid OpenAI API key as a system environment variable named `OPENAI_API_KEY`.
+  
+  Use `dotnet build` to compile the project. The executable will be under `bin\Debug\SimpleGPTInterface.exe`.
+  
+  Feel free to rename the file and add it to your system path so you can easily call it from the command line, kinda like this:
+  
   `gpt whats 4 times 12?`. No "quotes" needed.
